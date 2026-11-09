@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Soft Systems | ENCI Living Archive</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: #0d0c16;
+  color: #eee8ff;
+  font-family: Helvetica, Arial, sans-serif;
+  overflow: hidden;
+}
+
+header {
+  position: absolute;
+  top: 20px;
+  left: 24px;
+  z-index: 5;
+  pointer-events: none;
+}
+
+header h1 {
+  font-size: 16px;
+  letter-spacing: 3px;
+  font-weight: 400;
+  margin: 0;
+}
+
+header p {
+  font-size: 11px;
+  letter-spacing: 2px;
+  color: #aaa0c5;
+}
+
+#network {
+  width: 100vw;
+  height: 100vh;
+  display: block;
+  touch-action: none;
+}
+
+.link {
+  stroke: #9981c4;
+  stroke-width: 1.2;
+  opacity: 0.5;
+}
+
+.node circle {
+  fill: #272035;
+  stroke: #a38bce;
+  stroke-width: 1.5;
+  cursor: pointer;
+}
+
+.node text {
+  fill: #eee8ff;
+  font-size: 11px;
+  text-anchor: middle;
+  pointer-events: none;
+}
+
+.node.root circle {
+  fill: #49315f;
+  stroke: #dbc2ff;
+  stroke-width: 2;
+}
+
+.node.root text {
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.node {
+  cursor: pointer;
+}
+
+#panel {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  right: 20px;
+  max-width: 440px;
+  background: rgba(27,23,41,0.96);
+  border: 1px solid #75618f;
+  border-radius: 14px;
+  padding: 20px;
+  display: none;
+  z-index: 10;
+  max-height: 55vh;
+  overflow: auto;
+}
+
+#panel h2 {
+  margin: 0 0 10px;
+  font-size: 20px;
+}
+
+#panel p {
+  line-height: 1.6;
+  color: #d2c9df;
+  font-size: 14px;
+}
+
+#close {
+  float: right;
+  background: none;
+  border: 0;
+  color: white;
+  font-size: 22px;
+  cursor: pointer;
+}
+
+.hint {
+  position: absolute;
+  bottom: 15px;
+  right: 20px;
+  color: #aaa0c5;
+  font-size: 12px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>SOFT SYSTEMS</h1>
+  <p>ENCI · A LIVING ARCHIVE</p>
+</header>
+
+<svg
+  id="network"
+  aria-label="Interactive artistic research mind map">
+</svg>
+
+<section id="panel">
+  <button id="close" aria-label="Close">×</button>
+  <h2 id="panelTitle"></h2>
+  <p id="panelText"></p>
+</section>
+
+<div class="hint">Tap a node to explore</div>
+
+<script>
+
+const nodes = [
+  {
+    id: "root",
+    label: "SOFT SYSTEMS",
+    parent: null,
+    detail: "An evolving artistic research archive exploring relationships between landscape, material, memory, technology and human intervention."
+  },
+  {
+    id: "enci",
+    label: "ENCI · ON WATER",
+    parent: "root",
+    detail: "Arts & Ecologies: artistic research into the ENCI landscape, its industrial traces, ecological transformations and possible futures."
+  },
+  {
+    id: "photography",
+    label: "PHOTOGRAPHY",
+    parent: "enci",
+    detail: "An archive of landscape observations, industrial remnants, textures and changing ecological relationships."
+  },
+  {
+    id: "sound",
+    label: "SOUND & TIME",
+    parent: "enci",
+    detail: "A soundscape travelling through the deep past, industrial history, present landscape and an imagined technological future."
+  },
+  {
+    id: "materials",
+    label: "MATERIALS",
+    parent: "enci",
+    detail: "Experiments with butterfly bush, rusted metal, moss, cement dust, collected objects, inks and prints."
+  },
+  {
+    id: "research",
+    label: "RESEARCH",
+    parent: "enci",
+    detail: "Questions around landscape memory, invasive species, human intervention and the relationship between nature and industry."
+  },
+  {
+    id: "reflection",
+    label: "REFLECTION",
+    parent: "enci",
+    detail: "A growing record of observations, unexpected discoveries, unresolved questions, failures and changing artistic perspectives."
+  },
+  {
+    id: "installation",
+    label: "INSTALLATION",
+    parent: "enci",
+    detail: "Developing an interactive water and light projection, exploring how audience intervention transforms an image."
+  }
+];
+
+const svg = document.getElementById("network");
+
+const ns = "http://www.w3.org/2000/svg";
+
+const open = new Set();
+
+const positions = {};
+
+function make(tag, attrs, parent) {
+  const e = document.createElementNS(ns, tag);
+
+  for (const [k, v] of Object.entries(attrs)) {
+    e.setAttribute(k, v);
+  }
+
+  parent.appendChild(e);
+  return e;
+}
+
+function render() {
+
+  const w = innerWidth;
+  const h = innerHeight;
+
+  svg.setAttribute("viewBox", `0 0 ${w} ${h}`);
+  svg.replaceChildren();
+
+  const visible = nodes.filter(
+    n => n.parent === null || open.has(n.parent)
+  );
+
+  positions.root = {
+    x: w / 2,
+    y: h / 2
+  };
+
+  function layout(parentId, depth, start, end) {
+
+    const children = visible.filter(
+      n => n.parent === parentId
+    );
+
+    children.forEach((n, i) => {
+
+      const angle =
+        start + (end - start) * (i + 0.5) / children.length;
+
+      const radius =
+        depth === 1
+          ? Math.min(w, h) * 0.24
+          : Math.min(w, h) * 0.22;
+
+      const p = positions[parentId];
+
+      positions[n.id] = {
+        x: p.x + Math.cos(angle) * radius,
+        y: p.y + Math.sin(angle) * radius
+      };
+
+      if (open.has(n.id)) {
+        layout(
+          n.id,
+          depth + 1,
+          angle - 0.65,
+          angle + 0.65
+        );
+      }
+    });
+  }
+
+  layout("root", 1, 0, Math.PI * 2);
+
+  visible.forEach(n => {
+
+    if (!n.parent) return;
+
+    const a = positions[n.parent];
+    const b = positions[n.id];
+
+    if (a && b) {
+      make("line", {
+        x1: a.x,
+        y1: a.y,
+        x2: b.x,
+        y2: b.y,
+        class: "link"
+      }, svg);
+    }
+  });
+
+  visible.forEach(n => {
+
+    const p = positions[n.id];
+    if (!p) return;
+
+    const g = make("g", {
+      class: n.id === "root" ? "node root" : "node",
+      transform: `translate(${p.x},${p.y})`,
+      tabindex: "0",
+      role: "button",
+      "aria-label": n.label
+    }, svg);
+
+    make("circle", {
+      r: n.id === "root" ? 62 : 47
+    }, g);
+
+    const words = n.label.split(" ");
+
+    const lines = n.label.length > 13
+      ? [
+          words.slice(0, Math.ceil(words.length / 2)).join(" "),
+          words.slice(Math.ceil(words.length / 2)).join(" ")
+        ]
+      : [n.label];
+
+    lines.forEach((line, i) => {
+
+      const t = make("text", {
+        x: 0,
+        y: (i - (lines.length - 1) / 2) * 15 + 4
+      }, g);
+
+      t.textContent = line;
+    });
+
+    const activate = () => {
+
+      const children = nodes.some(
+        x => x.parent === n.id
+      );
+
+      if (children) {
+
+        if (open.has(n.id)) {
+          open.delete(n.id);
+        } else {
+          open.add(n.id);
+        }
+
+        render();
+
+      } else {
+
+        document.getElementById("panelTitle").textContent =
+          n.label;
+
+        document.getElementById("panelText").textContent =
+          n.detail;
+
+        document.getElementById("panel").style.display =
+          "block";
+      }
+    };
+
+    g.addEventListener("click", activate);
+
+    g.addEventListener("keydown", e => {
+
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        activate();
+      }
+    });
+  });
+}
+
+document.getElementById("close").onclick = () => {
+  document.getElementById("panel").style.display = "none";
+};
+
+addEventListener("resize", render);
+
+render();
+
+</script>
+
+</body>
+</html>
