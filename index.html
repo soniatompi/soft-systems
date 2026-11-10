@@ -1,77 +1,148 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Soft Systems – The Art of Human-AI Symbiosis</title>
-
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Soft Systems | Living Archive</title>
 <style>
-
-body{
-font-family: Helvetica, Arial, sans-serif;
-background:#f6f8ff;
-color:#222;
-margin:0;
-display:flex;
-align-items:center;
-justify-content:center;
-height:100vh;
-text-align:center;
-}
-
-.container{
-max-width:700px;
-padding:40px;
-}
-
-h1{
-font-size:42px;
-letter-spacing:1px;
-}
-
-p{
-font-size:18px;
-line-height:1.6;
-opacity:0.8;
-}
-
-.button{
-display:inline-block;
-margin-top:30px;
-padding:14px 28px;
-background:#6f7cff;
-color:white;
-text-decoration:none;
-border-radius:8px;
-font-weight:bold;
-}
-
-.button:hover{
-background:#4d59ff;
-}
-
+:root{--dark:#211d19;--stone:#d8c6a3;--rust:#a65332;--ochre:#c69a45;--cement:#77746d}
+*{box-sizing:border-box}body{margin:0;overflow:hidden;background:radial-gradient(ellipse at 50% 55%,#403226 0%,#29231d 46%,#171512 100%);color:var(--stone);font-family:Arial,Helvetica,sans-serif}
+#map{width:100vw;height:100dvh;display:block;touch-action:none}
+header{position:fixed;top:20px;left:22px;z-index:2;pointer-events:none}header strong{display:block;letter-spacing:.22em;font-size:14px;font-weight:500}header small{display:block;margin-top:8px;color:#ad9d85;letter-spacing:.12em;font-size:10px}
+#help{position:fixed;bottom:17px;left:20px;font-size:12px;color:#c3af8e;pointer-events:none}
+.edge{stroke:#aa6946;stroke-width:1.4;opacity:.55;stroke-linecap:round}.node{cursor:grab;outline:none;touch-action:none}.node.dragging{cursor:grabbing}.node .halo{pointer-events:none}.node circle.core{fill:#49372b;stroke:#c69a45;stroke-width:1.7}.node.root circle.core{fill:#5b412a;stroke:#e4bd72;stroke-width:2.2}.node text{fill:#f3e4c9;text-anchor:middle;pointer-events:none;font-size:11px;letter-spacing:.025em}.node.root text{font-size:13px;font-weight:700;letter-spacing:.12em}.node .halo{fill:#c69a45;opacity:.08;pointer-events:none}.node:focus .core{stroke:#fff0cd;stroke-width:3}
+#panel{display:none;position:fixed;right:18px;bottom:50px;left:18px;max-width:440px;max-height:55dvh;overflow:auto;background:#28221ded;border:1px solid #987650;border-radius:15px;padding:20px;z-index:4;box-shadow:0 12px 45px #0008}
+#panel h2{margin:0 32px 12px 0;color:#e9c58c;font-size:21px}#panel p{font-size:14px;line-height:1.65;color:#e2d4be}#panel a{display:inline-block;padding:11px 16px;border:1px solid #c69a45;border-radius:8px;color:#f4dbac;text-decoration:none;margin-top:8px}#panel a:hover{background:#55402b}
+#close{position:absolute;right:14px;top:10px;background:none;color:#f1dfc1;border:0;font-size:26px;cursor:pointer}
+#intro{position:fixed;inset:0;display:grid;place-items:center;z-index:6;background:radial-gradient(circle at center,#443325f7,#171512fc);padding:24px;text-align:center}
+#intro .card{max-width:580px}#intro .eyebrow{letter-spacing:.3em;color:#c69a45;font-size:11px}#intro h1{font-size:clamp(34px,7vw,64px);letter-spacing:.11em;font-weight:400;margin:20px 0}#intro p{line-height:1.75;color:#d7c6a8;font-size:16px}
+#enter{background:#9b6639;border:1px solid #e4b86b;border-radius:30px;padding:14px 28px;color:#fff3df;cursor:pointer;margin-top:20px;letter-spacing:.1em}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto}}
+</style>
+<style>
+#gallery{display:none;position:fixed;inset:0;z-index:8;background:#171512f7;color:#f3e4c9;overflow:auto;padding:24px max(18px,4vw) 55px}#gallery.visible{display:block}#gallery h1{font-size:clamp(23px,4vw,38px);font-weight:400;margin:0 0 12px}#gallery .top{display:flex;align-items:center;justify-content:space-between;gap:14px}#gallery button,#gallery select,#gallery input{background:#302820;color:#f3e4c9;border:1px solid #94734b;border-radius:8px;padding:10px}#gallery button{cursor:pointer}#gallery .controls{display:flex;gap:10px;flex-wrap:wrap;margin:18px 0}#gallery .controls input{flex:1;min-width:160px}#gallery .photos{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:18px}#gallery article{background:#29221c;border:1px solid #69553c;border-radius:12px;overflow:hidden}#gallery article img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block}#gallery article .info{padding:14px}#gallery article h2{font-size:18px;color:#e9c58c;margin:0 0 8px}#gallery article p{font-size:13px;line-height:1.5;margin:7px 0}#gallery article .tags{color:#c9a67a;font-size:11px}#gallery .introcopy{max-width:900px;line-height:1.7;color:#d7c6a8}#soundcontrol{position:fixed;z-index:7;bottom:14px;right:16px;display:none;background:#302820;color:#f3e4c9;border:1px solid #94734b;border-radius:22px;padding:10px 14px;cursor:pointer}#soundcontrol.visible{display:block}
 </style>
 </head>
-
 <body>
-
-<div class="container">
-
-<h1>Soft Systems</h1>
-
-<p>
-The Art of Human-AI Symbiosis
-</p>
-
-<p>
-An experimental digital magazine exploring fashion, technology,
-and emotional systems through narrative, design, and visual research.
-</p>
-
-<a class="button" href="assets/Soft-Systems-Magazine.pdf" target="_blank">
-Open Magazine
-</a>
-
-</div>
-
+<div id="intro"><div class="card"><div class="eyebrow">AN INVITATION TO EXPLORE</div><h1>SOFT SYSTEMS</h1><p>A living archive of interdisciplinary artistic research, where human experience meets technology, ecology, material and emotion. Follow the connections. Discover the questions behind the work.</p><button id="enter">ENTER THE ARCHIVE ↗</button></div></div>
+<header><strong>SOFT SYSTEMS</strong><small>A LIVING ARTISTIC ARCHIVE</small></header>
+<svg id="map" aria-label="Interactive expanding archive mind map"></svg>
+<div id="help">Tap to expand · Hold and drag bubbles · Release to float</div>
+<section id="panel" aria-live="polite"><button id="close" aria-label="Close panel">×</button><h2 id="title"></h2><p id="description"></p><a id="link" target="_blank" rel="noopener noreferrer" hidden>OPEN PROJECT ↗</a></section>
+<script>
+const data=[
+{id:"root",parent:null,label:"SOFT SYSTEMS",desc:"An evolving interdisciplinary artistic practice."},
+{id:"enci",parent:"root",label:"ENCI | ON WATER",desc:"Arts & Ecologies: an evolving research archive of the ENCI quarry, landscape memory, industrial traces, ecological transformations and possible futures."},
+{id:"magazine",parent:"root",label:"HUMAN–TECHNOLOGY\nSYMBIOSIS",desc:"An experimental digital magazine about fashion, technology and emotional systems.",url:"../assets/Soft-Systems-Magazine.pdf"},
+{id:"codex",parent:"root",label:"CREATIVE CODEX",desc:"An evolving collection of artistic exercises, participatory practices and creative protocols. More material will be added."},
+{id:"photo",parent:"enci",label:"PHOTOGRAPHY",desc:"ENCI observations: landscape, geological layers, industrial remnants, ecological details and collected visual traces. Add your photographs and captions here."},
+{id:"sound",parent:"enci",label:"SOUND & TIME",desc:"An imagined journey through ENCI's deep past, industrial history, present atmosphere and possible future. Add your soundscape here."},
+{id:"material",parent:"enci",label:"MATERIAL\nEXPERIMENTS",desc:"Experiments with butterfly bush pigments and prints, moss, rust, cement dust and found materials. Document methods, outcomes and surprises."},
+{id:"research",parent:"enci",label:"ARTISTIC\nRESEARCH",desc:"Questions about landscape memory, nature amnesia, invasive species and human intervention. Add sources, observations and evolving hypotheses."},
+{id:"reflection",parent:"enci",label:"REFLECTION",desc:"What changed in your way of seeing? What failed? What surprised you? What remains unresolved? Add your weekly research reflections."},
+{id:"installation",parent:"enci",label:"INSTALLATION",desc:"An interactive water-and-light projection exploring how a visitor's gesture transforms an image. Document sketches, tests and future possibilities."}
+];
+const svg=document.getElementById("map"), NS="http://www.w3.org/2000/svg";
+const expanded=new Set(["root"]), particles=new Map(), shapes=new Map();
+const reduceMotion=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+let drag=null, lastTime=0, raf=0, started=false;
+const size=n=>n.id==="root"?67:n.parent==="root"?57:48;
+const shown=()=>data.filter(n=>!n.parent||expanded.has(n.parent));
+function element(tag,attrs,parent){const e=document.createElementNS(NS,tag);for(const [k,v] of Object.entries(attrs))e.setAttribute(k,v);parent.appendChild(e);return e;}
+function ensureParticle(n){
+ if(particles.has(n.id))return particles.get(n.id);
+ const parent=particles.get(n.parent);
+ const siblings=data.filter(x=>x.parent===n.parent),i=siblings.findIndex(x=>x.id===n.id);
+ const angle=-Math.PI/2+i*2*Math.PI/siblings.length;
+ const distance=n.parent==="root"?Math.min(innerWidth,innerHeight)*.28:Math.min(innerWidth,innerHeight)*.29;
+ const x=parent?parent.x+Math.cos(angle)*Math.max(130,distance):innerWidth/2;
+ const y=parent?parent.y+Math.sin(angle)*Math.max(130,distance):innerHeight/2;
+ const p={x,y,vx:0,vy:0,fx:0,fy:0,r:size(n),phase:Math.random()*6.28};particles.set(n.id,p);return p;
+}
+function showPanel(n){document.getElementById("title").textContent=n.label.replace(/\n/g," ");document.getElementById("description").textContent=n.desc;const a=document.getElementById("link");a.hidden=!n.url;if(n.url)a.href=n.url;document.getElementById("panel").style.display="block";}
+function activate(n){if(n.id==="photo"){openArchive();return;}if(data.some(x=>x.parent===n.id)){expanded.has(n.id)?expanded.delete(n.id):expanded.add(n.id);document.getElementById("panel").style.display="none";build();}else showPanel(n);}
+function build(){
+ svg.setAttribute("viewBox",`0 0 ${innerWidth} ${innerHeight}`);svg.replaceChildren();shapes.clear();
+ const active=shown();active.forEach(ensureParticle);
+ const edges=element("g",{},svg),circles=element("g",{},svg);
+ active.forEach(n=>{if(!n.parent)return;const line=element("line",{class:"edge"},edges);shapes.set("edge-"+n.id,line);});
+ active.forEach(n=>{
+ const root=n.id==="root",r=size(n);
+ const g=element("g",{class:"node"+(root?" root":""),tabindex:"0",role:"button","aria-label":n.label.replace(/\n/g," ")},circles);
+ element("circle",{class:"halo",r:r+15},g);element("circle",{class:"core",r},g);
+ const lines=n.label.split("\n");lines.forEach((line,i)=>{const t=element("text",{x:0,y:(i-(lines.length-1)/2)*15+4},g);t.textContent=line;});
+ shapes.set(n.id,g);
+ g.addEventListener("pointerdown",e=>{
+   if(drag)return;e.preventDefault();const p=particles.get(n.id);
+   drag={id:n.id,pointer:e.pointerId,startX:e.clientX,startY:e.clientY,lastX:e.clientX,lastY:e.clientY,lastT:performance.now(),moved:false};
+   p.vx=0;p.vy=0;g.classList.add("dragging");g.setPointerCapture(e.pointerId);
+ });
+ g.addEventListener("pointermove",e=>{
+   if(!drag||drag.id!==n.id||drag.pointer!==e.pointerId)return;
+   const p=particles.get(n.id),now=performance.now(),dt=Math.max(8,now-drag.lastT);
+   const dx=e.clientX-drag.lastX,dy=e.clientY-drag.lastY;
+   if(Math.hypot(e.clientX-drag.startX,e.clientY-drag.startY)>7)drag.moved=true;
+   p.x+=dx;p.y+=dy;p.vx=Math.max(-13,Math.min(13,dx*16/dt));p.vy=Math.max(-13,Math.min(13,dy*16/dt));
+   drag.lastX=e.clientX;drag.lastY=e.clientY;drag.lastT=now;
+ });
+ const finish=e=>{
+   if(!drag||drag.id!==n.id||drag.pointer!==e.pointerId)return;
+   const clicked=!drag.moved;drag=null;g.classList.remove("dragging");if(g.hasPointerCapture(e.pointerId))g.releasePointerCapture(e.pointerId);
+   if(clicked)activate(n);
+ };
+ g.addEventListener("pointerup",finish);g.addEventListener("pointercancel",e=>{if(drag&&drag.id===n.id){drag=null;g.classList.remove("dragging");}});
+ g.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();activate(n);}});
+ });
+ paint();
+}
+function paint(){
+ shown().forEach(n=>{
+ const p=particles.get(n.id),g=shapes.get(n.id);if(g)g.setAttribute("transform",`translate(${p.x.toFixed(2)},${p.y.toFixed(2)})`);
+ if(n.parent){const parent=particles.get(n.parent),line=shapes.get("edge-"+n.id);if(line){line.setAttribute("x1",parent.x);line.setAttribute("y1",parent.y);line.setAttribute("x2",p.x);line.setAttribute("y2",p.y);}}
+ });
+}
+function animate(time){
+ const dt=Math.min(2.1,Math.max(.4,(time-(lastTime||time))/16.67));lastTime=time;
+ const active=shown(),w=innerWidth,h=innerHeight;
+ for(const n of active){const p=particles.get(n.id);p.fx=0;p.fy=0;}
+ // Elastic parent-child connections. No fixed anchor: the whole system is free to move.
+ for(const n of active){if(!n.parent)continue;const p=particles.get(n.id),q=particles.get(n.parent);
+ const dx=p.x-q.x,dy=p.y-q.y,d=Math.max(1,Math.hypot(dx,dy));
+ const ideal=n.parent==="root"?Math.min(220,Math.max(155,Math.min(w,h)*.29)):Math.min(210,Math.max(135,Math.min(w,h)*.28));
+ const f=(d-ideal)*.0048;p.fx-=dx/d*f;p.fy-=dy/d*f;q.fx+=dx/d*f;q.fy+=dy/d*f;
+ }
+ // Gentle mutual repulsion prevents bubbles overlapping.
+ for(let i=0;i<active.length;i++)for(let j=i+1;j<active.length;j++){
+ const a=particles.get(active[i].id),b=particles.get(active[j].id);
+ let dx=b.x-a.x,dy=b.y-a.y,d=Math.max(1,Math.hypot(dx,dy));
+ const clearance=a.r+b.r+25;
+ if(d<clearance){const f=(clearance-d)*.015;a.fx-=dx/d*f;a.fy-=dy/d*f;b.fx+=dx/d*f;b.fy+=dy/d*f;}
+ }
+ for(const n of active){const p=particles.get(n.id);if(drag&&drag.id===n.id)continue;
+ // Barely perceptible organic currents.
+ if(!reduceMotion){p.fx+=Math.sin(time/2100+p.phase)*.009;p.fy+=Math.cos(time/2600+p.phase)*.009;}
+ // Soft boundaries keep the archive within reach on mobile.
+ const pad=p.r+12;
+ if(p.x<pad)p.fx+=(pad-p.x)*.013;if(p.x>w-pad)p.fx-=(p.x-(w-pad))*.013;
+ if(p.y<pad+35)p.fy+=(pad+35-p.y)*.013;if(p.y>h-pad)p.fy-=(p.y-(h-pad))*.013;
+ p.vx=(p.vx+p.fx*dt)*.971;p.vy=(p.vy+p.fy*dt)*.971;
+ p.x+=p.vx*dt;p.y+=p.vy*dt;
+ }
+ paint();raf=requestAnimationFrame(animate);
+}
+document.getElementById("enter").onclick=()=>{document.getElementById("intro").remove();started=true;build();raf=requestAnimationFrame(animate);};
+document.getElementById("close").onclick=()=>document.getElementById("panel").style.display="none";
+addEventListener("resize",()=>{if(started)build();});
+</script>
+<section id="gallery" aria-label="ENCI photography archive"><div class="top"><h1>ENCI | Photography &amp; Material Archive</h1><button id="galleryclose">← BACK TO SYSTEM</button></div><p class="introcopy">My artistic practice explores the interconnected relationships between nature, technology, human intervention, and the environments we inhabit. At ENCI, I began observing the landscape as a living archive where geological time, industrial history, and ecological transformation coexist. Through photography, material collection, scanning, printing, water marbling, three-dimensional painting, and sound, I investigated relationships between materials and systems. I invite you to explore the connections between these observations and experiments.</p><div class="controls"><input id="searchphotos" placeholder="Search titles, captions and tags" aria-label="Search photographs"><select id="categoryphotos" aria-label="Filter category"><option value="">All categories</option></select><span id="countphotos"></span></div><div id="photogrid" class="photos"></div></section><button id="soundcontrol" aria-label="Toggle ENCI soundscape">♫ Play ENCI ambience</button><audio id="enciAudio" loop preload="none" src="assets/enci-ambience.mp3"></audio>
+<script>
+const archivePhotos=[{"filename": "3d_installation1.jpeg", "title": ".symbiosis.", "observation": "rusty metal plates on moss blanket", "caption": "visuals formed by experimenting with materials collected on site: industrial decay and nature rebirth", "category": "installations", "tags": ["installation", "rust", "industrial site", "decay", "transformation", "landscape memory", "moss"], "image": "images/photo-001.jpg"}, {"filename": "3d_installation2.jpeg", "title": ".decay.", "observation": "rusty metal and wood elements on canvas", "caption": "visuals formed by experimenting with materials collected on site: industrial decay and nature rebirth", "category": "installations", "tags": ["rust", "industrial site", "symbiosis"], "image": "images/photo-002.jpg"}, {"filename": "3d_installation3.jpeg", "title": ".remains.", "observation": "3 ceramic balls, 3 flint stones, wood and leaves, brick and shell on canvas covered in wood shavings", "caption": "visuals formed by experimenting with materials collected on site: natural elements", "category": "installations", "tags": ["installation", "landscape memory", "flint", "leaves", "brick", "shell", "ceramic balls"], "image": "images/photo-003.jpg"}, {"filename": "3d_installation4.jpeg", "title": ".remains 2.0.", "observation": "3 ceramic balls, 3 flint stones, wood and rusty plates, brick and shell on canvas covered in wood shavings", "caption": "visuals formed by experimenting with materials collected on site: natural elements and industrial decay", "category": "installations", "tags": ["installation", "landscape memory", "flint", "leaves", "brick", "shell", "ceramic balls", "rust", "industrial site"], "image": "images/photo-004.jpg"}, {"filename": "3d_installation6.jpeg", "title": ".contrast.", "observation": "electrical piece on landscape memory canvas installation of brick, limestone and wood shavings, on a blanket of moss", "caption": "visuals formed by experimenting with materials collected on site: industrial-nature contrast", "category": "installations", "tags": ["installation", "landscape memory", "brick", "shel", "industrial site", "moss", "contrast", "symbiosis"], "image": "images/photo-005.jpg"}, {"filename": "3d_installion5.jpeg", "title": ".landscape memory.", "observation": "brick , limestone and shell on wood shavings canvas", "caption": "visuals formed by experimenting with materials collected on site: deserted landscape", "category": "installations", "tags": ["installation", "landscape memory", "brick", "shel", "industrial site"], "image": "images/photo-006.jpg"}, {"filename": "BB_contrast.jpeg", "title": "butterfly bush stages", "observation": "fresh & decayed butterfly bush flowers", "caption": "contrast of the fresh and decayed butterfly bush flower", "category": "ecological material experimentation", "tags": ["butterfly bush", "invasive species", "natural pigments", "botanical ink", "material transformation", "ecological research"], "image": "images/photo-007.jpg"}, {"filename": "BB_harvest.jpeg", "title": "butterfly bush harvest", "observation": "butterfly bush flower harvest", "caption": "collected amount of  butterfly bush flowers for experimentation process", "category": "ecological material experimentation", "tags": ["butterfly bush", "invasive species", "natural pigments", "botanical ink", "material transformation", "ecological research"], "image": "images/photo-008.jpg"}, {"filename": "BB_ink_collection.jpeg", "title": "ink collection", "observation": "4 different types of ink experimentations with the butterfly bush flower buds", "caption": "ink experimentation collection", "category": "ecological material experimentation", "tags": ["butterfly bush", "invasive species", "natural pigments", "botanical ink", "material transformation", "ecological research"], "image": "images/photo-009.jpg"}, {"filename": "BB_ink_collection2.jpeg", "title": "ink collection 2nd perspective", "observation": "4 different types of ink experimentations with the butterfly bush flower buds", "caption": "ink experimentation collection", "category": "ecological material experimentation", "tags": ["butterfly bush", "invasive species", "natural pigments", "botanical ink", "material transformation", "ecological research"], "image": "images/photo-010.jpg"}, {"filename": "BB_outcome.jpeg", "title": "98% alcohol mixture ink", "observation": "butterfly bush flower ink, wool and canvas", "caption": "98% alcohol mixture of butterfly bush flower ink before tested on canvas sheet and wool", "category": "ecological material experimentation", "tags": ["butterfly bush", "invasive species", "natural pigments", "botanical ink", "material transformation", "ecological research"], "image": "images/photo-011.jpg"}, {"filename": "BB_outcome2.jpeg", "title": "liquid ink", "observation": "alcohol based ink in a jar lid", "caption": "butterfly bush - alcohol based ink color", "category": "ecological material experimentation", "tags": ["butterfly bush", "invasive species", "natural pigments", "botanical ink", "material transformation", "ecological research"], "image": "images/photo-012.jpg"}, {"filename": "BB_outcome3.jpeg", "title": "pigmented", "observation": "alcohol based ink on canvas", "caption": "butterfly bush - alcohol based ink on canvas - wet", "category": "ecological material experimentation", "tags": ["butterfly bush", "invasive species", "natural pigments", "botanical ink", "material transformation", "ecological research"], "image": "images/photo-013.jpg"}, {"filename": "BB_outcome4.jpeg", "title": "dyed", "observation": "alcohol based ink on canvas and wool - outcome", "caption": "butterfly bush - alcohol based ink on canvas and wool - wet - outcome", "category": "ecological material experimentation", "tags": ["butterfly bush", "invasive species", "natural pigments", "botanical ink", "material transformation", "ecological research"], "image": "images/photo-014.jpg"}, {"filename": "BB_process.jpeg", "title": "ink process", "observation": "fresh butterfly bush buds inside jar with alcohol", "caption": "freshly plucked butterfly bush flower buds and alcohol", "category": "ecological material experimentation", "tags": ["butterfly bush", "invasive species", "natural pigments", "botanical ink", "material transformation", "ecological research", "trash", "photography"], "image": "images/photo-015.jpg"}, {"filename": "BB_trash.jpeg", "title": "trash the nature", "observation": "butterfly bush flowers inside ecological trash", "caption": "butterfly bush flowers inside ecological trash", "category": "ecological material experimentation", "tags": ["butterfly bush", "invasive species", "natural pigments", "botanical ink", "material transformation", "ecological research", "trash", "photography"], "image": "images/photo-115.jpg"}, {"filename": "BB_trash2.jpeg", "title": "invasiveness", "observation": "butterfly bush flowers inside ecological trash", "caption": "butterfly bush flowers inside ecological trash", "category": "ecological material experimentation", "tags": ["butterfly bush", "invasive species", "natural pigments", "botanical ink", "material transformation", "ecological research", "trash", "photography"], "image": "images/photo-116.jpg"}, {"filename": "ECI_group_2.jpg", "title": "field work", "observation": "iArts year 2 class exploring the enci quarry caves", "caption": "landscape exploration with Laurens Landeweerd and Jacqueline Heerema", "category": "ENCI - photography", "tags": ["landscape memory", "artistic research", "quarry", "field work", "photography"], "image": "images/photo-117.jpg"}, {"filename": "ENCI_A2.jpeg", "title": "view point", "observation": "viewpoint perspective of the enci quarry from inside the factory", "caption": "viewpoint of the ENCI quarry from the ENCI industrial site", "category": "ENCI - photography", "tags": ["landscape memory", "artistic research", "quarry", "field work", "photography"], "image": "images/photo-118.jpg"}, {"filename": "ENCI_A3.jpeg", "title": "trashed metal", "observation": "factory container filled with metal trash", "caption": "trash or gold?", "category": "ENCI - photography", "tags": ["rust", "industrial site", "decay", "trash", "metal", "photography"], "image": "images/photo-119.jpg"}, {"filename": "ENCI_AESTHETIC.jpeg", "title": "two of each", "observation": "two enci cement bags and two fallen leaves", "caption": "abandoned enci cement bags in contrast with decaying leaves, two of each", "category": "ENCI - photography", "tags": ["industrial site", "decay", "trash", "memory", "photography"], "image": "images/photo-016.jpg"}, {"filename": "ENCI_algae_on_limestone.jpeg", "title": "what once was and is", "observation": "algae marks on the limestone texture", "caption": "algae marks on the cave's limestone wall", "category": "patterns", "tags": ["limestone", "landscape memory", "algae", "textures", "photography"], "image": "images/photo-017.jpg"}, {"filename": "ENCI_algae_on_limestone2.jpeg", "title": "dead yet alive", "observation": "algae marks and spiderweb on the limestone wall texture", "caption": "algae marks and spiderweb remains on the cave's limestone wall", "category": "ENCI - photography", "tags": ["limestone", "landscape memory", "algae", "textures", "memory", "photography"], "image": "images/photo-018.jpg"}, {"filename": "ENCI_BB_1.jpeg", "title": "quarry bushes", "observation": "butterfly bush flowers found by the quarry caves", "caption": "butterfly bush in it's \"natural\" habitat", "category": "ENCI - photography", "tags": ["butterfly bush", "limestone", "landscape memory", "photography"], "image": "images/photo-019.jpg"}, {"filename": "ENCI_chair.jpeg", "title": "interior design", "observation": "abandoned chair found at the industrial site", "caption": "abandoned chair found at the industrial site of enci", "category": "ENCI - photography", "tags": ["limestone", "landscape memory", "photography", "abandoned materials"], "image": "images/photo-020.jpg"}, {"filename": "ENCI_chalk_paradise.jpeg", "title": "CHALK PARADISE", "observation": "illustration", "caption": " future speculations illustration of the quarry - by Natuurmonumenten", "category": "ENCI - photography", "tags": ["landscape memory", "artistic research", "quarry", "field work", "illustration", "future speculations"], "image": "images/photo-021.jpg"}, {"filename": "ENCI_COLLAGE.jpeg", "title": "ENCI through MY eyes", "observation": "collage", "caption": "collaged images taken during fieldwork at ENCI", "category": "ENCI - photography", "tags": ["landscape memory", "artistic research", "quarry", "field work", "collage", "decay", "symbiosis", "rust", "limestone", "brick", "trash"], "image": "images/photo-022.jpg"}, {"filename": "ENCI_Collectables_1.jpeg", "title": "collectables", "observation": "collected materials", "caption": "collected materials from the ENCI quarry", "category": "artistic research", "tags": ["moss", "shells", "metal", "artistic research", "field work"], "image": "images/photo-023.jpg"}, {"filename": "ENCI_colour_pallette.jpeg", "title": "color palette", "observation": "textured acryl painting", "caption": "Bureau Europa acryl painting of ENCI color palette", "category": "artistic research", "tags": ["artistic resarch"], "image": "images/photo-024.jpg"}, {"filename": "ENCI_factory_outside.jpeg", "title": "industrialisation", "observation": "enci factory from outside", "caption": "ENCI factory from outside - mid distance", "category": "ENCI - photography", "tags": ["industrial site", "decay", "trash", "memory", "photography", "field work", "rust"], "image": "images/photo-025.jpg"}, {"filename": "ENCI_falling_wall.jpeg", "title": "stable foundations", "observation": "broken wall", "caption": "holding up?", "category": "ENCI - photography", "tags": ["industrial site", "memory", "fieldwork", "photography"], "image": "images/photo-026.jpg"}, {"filename": "ENCI_favourite picture.jpeg", "title": "SYMBIOSIS", "observation": "Enci factory - quarry contrast", "caption": "two worlds collided - abandoned industrial site and rebirthed nature", "category": "ENCI - photography", "tags": ["industrial site", "memory", "fieldwork", "photography", "nature", "landscape"], "image": "images/photo-027.jpg"}, {"filename": "ENCI_grove_cave.jpeg", "title": "limestone caves", "observation": "enci quarry/grove caves", "caption": "enci grove caves", "category": "ENCI - photography", "tags": ["landscape memory", "fieldwork", "photography", "nature", "limestone", "butterfly bush"], "image": "images/photo-028.jpg"}, {"filename": "ENCI_grove_quarry.jpeg", "title": "ecological nursery", "observation": "enci quarry landscape", "caption": "enci quarry landscape", "category": "ENCI - photography", "tags": ["landscape memory", "fieldwork", "photography", "nature", "limestone"], "image": "images/photo-029.jpg"}, {"filename": "ENCI_inside_factory.jpeg", "title": "liminal space", "observation": "inside the abandoned enci factory", "caption": "a peek inside the abandoned", "category": "ENCI - photography", "tags": ["industrial site", "decay", "trash", "memory", "photography", "rust", "dust", "cement", "fieldwork"], "image": "images/photo-030.jpg"}, {"filename": "ENCI_inside_factory_abandoned items.jpeg", "title": "remains of what once was", "observation": "inside the abandoned enci factory", "caption": "time passing by, collecting dust", "category": "ENCI - photography", "tags": ["industrial site", "decay", "trash", "memory", "photography", "rust", "dust", "cement", "fieldwork"], "image": "images/photo-031.jpg"}, {"filename": "ENCI_inside_factory2.jpeg", "title": "tunneling through time", "observation": "inside the abandoned enci factory", "caption": "tunnel inside the enci factory", "category": "ENCI - photography", "tags": ["industrial site", "decay", "trash", "memory", "photography", "rust", "dust", "cement", "fieldwork"], "image": "images/photo-032.jpg"}, {"filename": "ENCI_outside_up perspective.jpeg", "title": "on top of the cement", "observation": "balcony overview of the enci factory", "caption": "view point over the factory of enci", "category": "ENCI - photography", "tags": ["industrial site", "decay", "memory", "photography", "rust", "dust", "cement", "fieldwork"], "image": "images/photo-033.jpg"}, {"filename": "ENCI_past.jpeg", "title": "on top of the world", "observation": "drone overview perspective of the ENCI ", "caption": "drone viewpoint of the ENCI 1949-1989", "category": "ENCI - photography", "tags": ["landscape memory", "photograpy", "artistic research", "nature", "limestone", "escavation", "nature"], "image": "images/photo-034.jpg"}, {"filename": "ENCI_rusty_factory_outside.jpeg", "title": "rusting away", "observation": "rusty abandoned part of the factory", "caption": "rusty part of the factory, covered in layers of cement dust developed through time", "category": "ENCI - photography", "tags": ["industrial site", "decay", "memory", "photography", "rust", "dust", "cement", "fieldwork"], "image": "images/photo-035.jpg"}, {"filename": "Industrial_patterns_1.jpeg", "title": "burnt", "observation": "close up ashes/charcoal residue", "caption": "charcoal residue textures and crack patterns", "category": "patterns", "tags": ["patterns", "textures", "charcoal", "ashes", "overlay", "cement"], "image": "images/photo-036.jpg"}, {"filename": "Industrial_patterns_2.jpeg", "title": "burned", "observation": "close up ashes/charcoal residue", "caption": "charcoal residue textures and crack patterns", "category": "patterns", "tags": ["patterns", "textures", "charcoal", "ashes", "overlay", "cement"], "image": "images/photo-037.jpg"}, {"filename": "Industrial_patterns_3.jpeg", "title": "bits and pieces", "observation": "close up of crushed cement layers", "caption": "close up of crushed cement - patterns and textures", "category": "patterns", "tags": ["patterns", "textures", "charcoal", "ashes", "overlay", "cement"], "image": "images/photo-038.jpg"}, {"filename": "Industrial_patterns_4.jpeg", "title": "cement walls", "observation": "cement walls", "caption": "textures and patterns on cement walls", "category": "patterns", "tags": ["patterns", "textures", "overlay", "cement"], "image": "images/photo-039.jpg"}, {"filename": "oehoe.jpeg", "title": "Oehoe", "observation": "eagle owl oehoe", "caption": "taxidermy of the eagle owl \" Oehoe\" found and preserved at the ENCI quarry ", "category": "artistic research", "tags": ["artistic resarch", "memory", "ecological research"], "image": "images/photo-040.jpg"}, {"filename": "Patterns_brick_on moss.jpeg", "title": "brick", "observation": "brick on moss", "caption": "color and material contrast - brick on moss bed", "category": "patterns", "tags": ["artistic resarch", "memory", "ecological research", "brick"], "image": "images/photo-041.jpg"}, {"filename": "PATTERNS_brokenglass.jpeg", "title": "shattered", "observation": "broken window inside factory", "caption": "shattered window inside the enci factory building", "category": "patterns", "tags": ["patterns", "textures", "overlay", "cement", "artistic research", "fieldwork"], "image": "images/photo-042.jpg"}, {"filename": "PATTERNS_contrast.jpeg", "title": "contrast", "observation": "moss growing on rusty pole", "caption": "moss growing alive on a rusty metal pole", "category": "patterns", "tags": ["patterns", "textures", "overlay", "cement", "artistic research", "fieldwork", "moss", "rust"], "image": "images/photo-043.jpg"}, {"filename": "PATTERNS_contrast2.jpeg", "title": "falling apart, yet never been more alive", "observation": "moss on rusty pole", "caption": "moss growing alive on a rusty metal pole", "category": "patterns", "tags": ["patterns", "textures", "overlay", "cement", "artistic research", "fieldwork", "moss", "rust"], "image": "images/photo-044.jpg"}, {"filename": "PATTERNS_gravel.jpeg", "title": "gravel", "observation": "gravel", "caption": "gravel", "category": "patterns", "tags": ["patterns", "textures", "overlay", "cement", "artistic research", "fieldwork", "moss", "rust"], "image": "images/photo-045.jpg"}, {"filename": "PATTERNS_gravel2.jpeg", "title": "blending in", "observation": "zoom on gravel", "caption": "zoom on gravel", "category": "patterns", "tags": ["patterns", "textures", "overlay", "cement", "artistic research", "fieldwork", "moss", "rust"], "image": "images/photo-046.jpg"}, {"filename": "PATTERNS_mold.jpeg", "title": "mold", "observation": "mold on surface", "caption": "the beauty of mold patterns", "category": "patterns", "tags": ["patterns", "textures", "overlay", "artistic research", "fieldwork", "mold"], "image": "images/photo-047.jpg"}, {"filename": "Patterns_rusty_can.jpeg", "title": "consumerism", "observation": "degrading soda can inside the abandoned factory", "caption": "the effects of consumerism through time - soda can found inside the abandoned enci factory building", "category": "patterns", "tags": ["patterns", "textures", "overlay", "cement", "artistic research", "fieldwork", "moss", "rust"], "image": "images/photo-048.jpg"}, {"filename": "PATTERNS_rusty_cement_wall.jpeg", "title": "bleed", "observation": "rust bleeding through cement wall", "caption": "rust bleeding through cement wall surface", "category": "patterns", "tags": ["patterns", "textures", "overlay", "cement", "artistic research", "fieldwork", "moss", "rust"], "image": "images/photo-049.jpg"}, {"filename": "PATTERNS_rusty_plate.jpeg", "title": "moist", "observation": "close up on rusty stone plate", "caption": "stone plate", "category": "patterns", "tags": ["patterns", "textures", "overlay", "cement", "artistic research", "fieldwork", "moss", "rust"], "image": "images/photo-050.jpg"}, {"filename": "PATTERNS_rusty_plate_original.jpeg", "title": "rusty plate", "observation": "rusty metal plate on sand", "caption": "the beauty of oxidation", "category": "patterns", "tags": ["patterns", "textures", "overlay", "artistic research", "fieldwork", "rust"], "image": "images/photo-051.jpg"}, {"filename": "PATTERNS_rusty_plate2.jpeg", "title": "corrosion", "observation": " zoom in on the rusty metal plate on sand", "caption": "the beauty of transformation through colors and patterns", "category": "patterns", "tags": ["patterns", "textures", "overlay", "artistic research", "fieldwork", "rust"], "image": "images/photo-052.jpg"}, {"filename": "PATTERNS_rusty_plate3.jpeg", "title": "colors of transformation", "observation": "zoom in on the rusty metal plate on sand", "caption": "corrosion and limestone dust", "category": "patterns", "tags": ["patterns", "textures", "overlay", "artistic research", "fieldwork", "rust", "limestone"], "image": "images/photo-053.jpg"}, {"filename": "PATTERNS_rusty_wall bleeding.jpeg", "title": "haunting colors", "observation": "rust wall", "caption": "the colors of enci outside of enci - rusty metal pole", "category": "patterns", "tags": ["patterns", "textures", "overlay", "artistic research", "fieldwork", "rust"], "image": "images/photo-054.jpg"}, {"filename": "PATTERNS_rusty_wall1.jpeg", "title": "red 40", "observation": "rust wall", "caption": "loosing yourself into corrosion", "category": "patterns", "tags": ["patterns", "textures", "overlay", "artistic research", "fieldwork", "rust"], "image": "images/photo-055.jpg"}, {"filename": "PATTERNS_rusty_wall2.jpeg", "title": "vintage", "observation": "rust wall", "caption": "there's something so fascinating about a rusty wall plate, isn't it?", "category": "patterns", "tags": ["patterns", "textures", "overlay", "artistic research", "fieldwork", "rust"], "image": "images/photo-056.jpg"}, {"filename": "PATTERNS_vegetation_on_wall.jpeg", "title": "rebirth", "observation": "moss growing on cement wall", "caption": "nature taking over ,,, slowly", "category": "patterns", "tags": ["patterns", "textures", "overlay", "artistic research", "fieldwork", "cement", "moss", "nature"], "image": "images/photo-057.jpg"}, {"filename": "R_DDW1.jpeg", "title": "DDW personal research", "observation": "ddw personal research", "caption": "Dutch Design Week personal research presentation", "category": "artistic research", "tags": ["artistic resarch", "memory", "ecological research", "butterfly bush", "installantions"], "image": "images/photo-058.jpg"}, {"filename": "R_DDW2.jpeg", "title": "DDW group research", "observation": "ddw group research", "caption": "Dutch Design Week group research presentation", "category": "artistic research", "tags": ["artistic resarch", "memory", "ecological research", "butterfly bush", "installantions"], "image": "images/photo-059.jpg"}, {"filename": "R_material_collection.jpeg", "title": "material symbiosis", "observation": "trashed out zone at the enci", "caption": "gold mine", "category": "artistic research", "tags": ["patterns", "textures", "overlay", "artistic research", "fieldwork", "rust"], "image": "images/photo-164.jpg"}, {"filename": "R_material_collection2.jpeg", "title": "material symbiosis - harvesting", "observation": "trashed out zone at the enci", "caption": "once trash, becoming art", "category": "artistic research", "tags": ["patterns", "textures", "overlay", "artistic research", "fieldwork", "rust"], "image": "images/photo-165.jpg"}, {"filename": "research_group1.jpeg", "title": "field work2.0", "observation": "fieldwork on enci landscape", "caption": "group fieldwork exploration around the landscape of enci", "category": "artistic research", "tags": ["landscape memory", "artistic research", "quarry", "field work", "photography"], "image": "images/photo-060.jpg"}, {"filename": "RUST_WATER.jpeg", "title": "we all float too", "observation": "rusty water container", "caption": "rusty water container with natural elements inside", "category": "patterns", "tags": ["patterns", "textures", "overlay", "artistic research", "fieldwork", "rust"], "image": "images/photo-061.jpg"}, {"filename": "scan_printing.jpeg", "title": "elementalise the scan", "observation": "scanning experimentation", "caption": "scan printing experimentation", "category": "artistic research", "tags": ["patterns", "textures", "overlay", "artistic research", "fieldwork", "rust"], "image": "images/photo-062.jpg"}, {"filename": "scan_printing2.jpeg", "title": "scanning the elements", "observation": "scanning experimentation", "caption": "scan printing experimentation", "category": "artistic research", "tags": ["patterns", "textures", "overlay", "artistic research", "fieldwork", "rust"], "image": "images/photo-063.jpg"}, {"filename": "SQUARE.jpeg", "title": "squared up ", "observation": "water square with moss border", "caption": "training my eyes to spot square shaped elements around the landscape of enci", "category": "artistic research", "tags": ["patterns", "textures", "overlay", "artistic research", "fieldwork", "rust", "moss"], "image": "images/photo-064.jpg"}];
+const gallery=document.getElementById('gallery'), grid=document.getElementById('photogrid'), category=document.getElementById('categoryphotos'), search=document.getElementById('searchphotos');
+for(const c of [...new Set(archivePhotos.map(p=>p.category))].sort()){const o=document.createElement('option');o.value=c;o.textContent=c;category.appendChild(o)}
+function renderPhotos(){const q=search.value.trim().toLowerCase(),cat=category.value;const found=archivePhotos.filter(p=>(!cat||p.category===cat)&&(!q||[p.title,p.caption,p.observation,p.category,...p.tags].join(' ').toLowerCase().includes(q)));grid.replaceChildren();document.getElementById('countphotos').textContent=found.length+' works';for(const p of found){const a=document.createElement('article'),img=document.createElement('img'),info=document.createElement('div'),title=document.createElement('h2'),caption=document.createElement('p'),tags=document.createElement('div');img.src=p.image;img.alt=p.observation||p.title;img.loading='lazy';title.textContent=p.title;caption.textContent=p.caption;tags.className='tags';tags.textContent=p.tags.join(' · ');info.className='info';info.append(title,caption,tags);a.append(img,info);grid.appendChild(a)}}
+search.addEventListener('input',renderPhotos);category.addEventListener('change',renderPhotos);
+function openArchive(){gallery.classList.add('visible');renderPhotos()};document.getElementById('galleryclose').onclick=()=>gallery.classList.remove('visible');
+const audio=document.getElementById('enciAudio'),sound=document.getElementById('soundcontrol');sound.onclick=async()=>{if(audio.paused){try{await audio.play();sound.textContent='♫ Pause ENCI ambience'}catch(e){sound.textContent='♫ Tap to play ambience'}}else{audio.pause();sound.textContent='♫ Play ENCI ambience'}};
+document.getElementById('enter').addEventListener('click',()=>{sound.classList.add('visible')});
+</script>
 </body>
 </html>
